@@ -22,6 +22,10 @@ export function EditEntryDialog({ id, initialData }: EditEntryDialogProps) {
   const [open, setOpen] = useState(false);
   const [isPending, setIsPending] = useState(false);
 
+  const patientCount = initialData.patientCount as string | number | undefined;
+  const dailyRevenue = initialData.dailyRevenue as string | number | undefined;
+  const notes = initialData.notes as string | undefined;
+
   async function handleSubmit(formData: FormData) {
     setIsPending(true);
 
@@ -54,7 +58,7 @@ export function EditEntryDialog({ id, initialData }: EditEntryDialogProps) {
               id={`patientCount-${id}`}
               name="patientCount"
               type="number"
-              defaultValue={String(initialData.patientCount ?? "")}
+              defaultValue={String(patientCount ?? "")}
               required
             />
           </div>
@@ -65,7 +69,7 @@ export function EditEntryDialog({ id, initialData }: EditEntryDialogProps) {
               name="dailyRevenue"
               type="number"
               step="0.01"
-              defaultValue={String(initialData.dailyRevenue ?? "")}
+              defaultValue={String(dailyRevenue ?? "")}
               required
             />
           </div>
@@ -75,7 +79,7 @@ export function EditEntryDialog({ id, initialData }: EditEntryDialogProps) {
               id={`notes-${id}`}
               name="notes"
               type="text"
-              defaultValue={String(initialData.notes ?? "")}
+              defaultValue={notes ?? ""}
             />
           </div>
           <Button type="submit" disabled={isPending}>
