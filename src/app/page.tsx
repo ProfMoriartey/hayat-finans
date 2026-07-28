@@ -1,35 +1,47 @@
+import { Show, SignInButton } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
+import { Button } from "~/components/ui/button";
 
-export default function HomePage() {
+export default async function LandingPage() {
+  const { sessionClaims } = await auth();
+  const isAdmin = sessionClaims?.metadata?.role === "admin";
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
-        <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-          Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
-        </h1>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-            href="https://create.t3.gg/en/usage/first-steps"
-            target="_blank"
-          >
-            <h3 className="text-2xl font-bold">First Steps →</h3>
-            <div className="text-lg">
-              Just the basics - Everything you need to know to set up your
-              database and authentication.
-            </div>
-          </Link>
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-            href="https://create.t3.gg/en/introduction"
-            target="_blank"
-          >
-            <h3 className="text-2xl font-bold">Documentation →</h3>
-            <div className="text-lg">
-              Learn more about Create T3 App, the libraries it uses, and how to
-              deploy it.
-            </div>
-          </Link>
+    <main className="flex min-h-screen flex-col items-center justify-center p-6 text-center">
+      <div className="w-full max-w-sm space-y-8">
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+            Clinic Accounting
+          </h1>
+          <p className="text-gray-500">
+            Manage your daily revenue and patient records securely
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <Show when="signed-out">
+            <SignInButton>
+              <Button className="w-full" size="lg">
+                Log In
+              </Button>
+            </SignInButton>
+          </Show>
+
+          <Show when="signed-in">
+            {isAdmin && (
+              <Link href="/admin" className="w-full">
+                <Button className="w-full" variant="outline" size="lg">
+                  Admin Dashboard
+                </Button>
+              </Link>
+            )}
+            <Link href="/dashboard" className="w-full">
+              <Button className="w-full" size="lg">
+                Staff Dashboard
+              </Button>
+            </Link>
+          </Show>
         </div>
       </div>
     </main>
